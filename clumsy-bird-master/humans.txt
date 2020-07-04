@@ -1,13 +1,11 @@
 /* TEAM */
 
-Developer: Ellison Leão 
-Site: https://ellisonleao.github.io, https://github.com/ellisonleao
-Twitter: @ellisonleao
-Location: Curitiba, Brazil
+Developer: Даниил Молотков
+Site: https://MolotkovD.github.io
 
 /* SITE */
 
-Last Update: 2014/03/06
+Last Update: 2020/07/04
 Standards: HTML5, CSS3
 Components: MelonJS, jQuery
 Software: VIM, Photoshop

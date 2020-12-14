@@ -1,0 +1,624 @@
+//////////////////////////////////////////////
+//        Настройки для RemoteXY            //
+//////////////////////////////////////////////
+
+// определение режима соединения и подключение библиотеки RemoteXY
+#define REMOTEXY_MODE__SOFTSERIAL
+  #include <SoftwareSerial.h>
+
+#include <RemoteXY.h> //Библиотека RemoteXY. Скачать тут http://remotexy.com/ru/library/
+
+// настройки соединения
+#define REMOTEXY_SERIAL_RX 2        //Пин RX для Bluetooth
+#define REMOTEXY_SERIAL_TX 3        //Пин TX для Bluetooth
+#define REMOTEXY_SERIAL_SPEED 9600  //Скорость передачи 
+
+
+// конфигурация интерфейса
+#pragma pack(push, 1)
+uint8_t RemoteXY_CONF[] =
+{ 255,1,0,62,0,105,1,8,80,0,
+  67,4,3,9,20,5,2,26,7,67,
+  4,30,9,19,5,2,26,5,67,4,
+  58,9,20,5,2,26,8,67,4,3,
+  21,20,5,2,26,11,67,4,30,21,
+  20,5,2,26,9,67,4,58,21,20,
+  5,2,26,11,129,0,1,4,24,3,
+  24,208,162,208,181,208,188,208,191,208,
+  181,209,128,208,176,209,130,209,131,209,
+  128,208,176,44,32,194,176,208,161,0,
+  129,0,30,4,21,3,24,208,146,208,
+  187,208,176,208,182,208,189,208,190,209,
+  129,209,130,209,140,44,32,37,0,129,
+  0,56,4,25,3,24,208,148,208,176,
+  209,130,209,135,208,184,208,186,32,208,
+  147,208,176,208,183,208,176,44,32,112,
+  112,109,0,129,0,2,17,23,3,24,
+  208,160,208,176,209,129,209,129,209,130,
+  208,190,209,143,208,189,208,184,208,181,
+  44,32,99,109,0,129,0,32,17,15,
+  3,24,208,152,208,154,45,208,148,208,
+  176,209,130,209,135,208,184,208,186,0,
+  129,0,59,17,18,3,24,208,148,208,
+  176,209,130,209,135,208,184,208,186,32,
+  208,190,208,179,208,189,209,143,0,2,
+  0,51,47,27,10,2,26,31,31,79,
+  80,69,78,0,67,76,79,83,69,0,
+  129,0,47,41,40,3,24,208,158,209,
+  130,208,186,209,128,209,139,209,130,208,
+  184,208,181,47,208,151,208,176,208,186,
+  209,128,209,139,209,130,208,184,208,181,
+  32,208,148,208,178,208,181,209,128,208,
+  184,0,67,4,58,33,20,5,2,26,
+  11,129,0,57,29,26,3,24,208,159,
+  208,190,208,187,208,190,208,182,208,181,
+  208,189,208,184,208,181,32,208,148,208,
+  178,208,181,209,128,208,184,0 };
+
+// структура определяет все переменные вашего интерфейса управления
+struct {
+
+  // input variable
+  uint8_t Door; // =1 если переключатель включен и =0 если отключен
+
+  // output variable
+  char Temp[7];  // =строка UTF8 оканчивающаяся нулем(строка для вывода температуры)
+  char Humidity[5];  // =строка UTF8 оканчивающаяся нулем (строка для вывода Влажности)
+  char MQ_Sensor[8];  // =строка UTF8 оканчивающаяся нулем (строка для вывода значений с MQ-сенсора)
+  char Rasstoyanie[11];  // =строка UTF8 оканчивающаяся нулем (строка для вывода расстояния с датчика HC-SR04)
+  char IK_Datchik[9];  // =строка UTF8 оканчивающаяся нулем (строка для вывода состояния ИК-датчика)
+  char FLAME[11];  // =строка UTF8 оканчивающаяся нулем (строка для вывода состояния датчика пламение)
+  char Door_Status[11];  // =строка UTF8 оканчивающаяся нулем (строка для вывода положения двери)
+
+  // other variable
+  uint8_t connect_flag;  // =1 if wire connected, else =0 (Переменная для работы RemoteXY)
+
+} RemoteXY;
+#pragma pack(pop)
+
+/////////////////////////////////////////////
+//           Настройки для RemoteXY         //
+/////////////////////////////////////////////
+
+#include <SPI.h>               //Библиотека SPI для RFID-считывателя
+#include <MFRC522.h>           //Библиотека для RFID-считывателя. Установить ...>Управлять библиотеками...>MFRC552
+#include "LedControl.h"        //Библеотека для RGB-матрицы 8*8. . Установить ...>Управлять библиотеками...>LED Control
+#include "DHT.h"               //Библиотека для термодатчика Скачать //https://www.arduinolibraries.info/libraries/dht-sensor-library
+                               //DHT sensor library by Adafruit (версия 1.2.3)
+#include "PCF8574.h"           //Библиотека для расширителя портов. Скачать https://github.com/skywodd/pcf8574_arduino_library. Выбрать PCF8574
+#include <Servo.h>             //Библиотека для сервопривода
+#include <LiquidCrystal_I2C.h> //Библиотка для LCD-дисплея. Установить ...>Управлять библиотеками...>LiquidCrystal_I2C by Frank de Brabander
+#include <Wire.h>
+#include "binary.h"
+
+//Аналоговые пины
+#define MQPin A0              //Номер пина Датчик Газа
+#define PotenPin A1           //Номер пина Потенциометра
+#define IKPin  A2             //Номер пина ИК датчика
+#define photoPin A3           //Номер пина фоторезистора
+
+//Цифровые пины
+#define TrigPin 4              //Номер пина Trig Датчка расстояния(HC-SR04)
+#define EchoPin 5              //Номер пина Echo Датчка расстояния(HC-SR04)
+#define ServoPin 6             //Номер пина Сервопривода
+#define DHTPIN 7               //Номер пина датчика температуры и влажности DHT11
+#define DHTTYPE DHT11          //Тип Термодатчика DHT11
+
+
+#define RST_PIN 9              //Номер пина RST RFID-считывателя
+#define SS_PIN  10             //Номер пина SDA(SS) RFID-считывателя
+
+#define CS_PIN 8               //Номер пина CS  RGB-Матрицы
+#define DIN_PIN 11             //Номер пина DIN RGB-Матрицы
+#define CLK_PIN 13             //Номер пина CLK RGB-Матрицы 
+
+//Пины на расширителе
+#define LED_PIN_RED 0          //Номер пина красного LED    
+#define LED_PIN_GREEN 1        //Номер пина зеленого LED 
+#define ZummerPin 2            //Номер пина Зуммера на расширителе
+#define FlamePin 3             //Номер пина Датчика пламени
+#define SoundPin 4             //Номер пина Датчика звука
+
+
+PCF8574 expander;                                           //Создание объект класса PCF8574(расширитель)
+Servo myservo;                                              // Создание объект класса Servo(сервопривод)
+LiquidCrystal_I2C lcd(0x27, 16, 2);                         // Создание объекта класса LiquidCrystal_I2C(LCD-дисплей) со следующими параметрами(адрес, кол-во клеток на экране,кол-во строк)
+DHT dht(DHTPIN, DHTTYPE);                                   // Создание объекта класса DHT(Термодатчик) со следующими параметрами(номер пина, тип Термодатчика)
+LedControl matr = LedControl(DIN_PIN, CLK_PIN, CS_PIN, 1);  // Создание объекта класса LedControl(RGB матрица) со следующими параметрами(номер пина DIN,номер пина CLK,номер пина CS,кол-во RGB матриц)
+MFRC522 mfrc522(SS_PIN, RST_PIN);                           // Создание объекта класса MFRC522(RFID-считывателя) со следующими параметрами(номер пина SS-пина,номер RST пина)
+;
+//МАТРИЦА 8х8
+// Счастливый смайл
+//byte hf[8] = {B00111100, B01000010, B10011001, B10100101, B10000001, B10100101, B01000010, B00111100};
+  byte hf[8]   = {B00000000,B00011000,B00100100,B01000010,B00000000,B00000000,B00100100,B00000000};
+
+// Нейтральный смайл
+//byte nf[8] = {B00111100, B01000010, B10000001, B10111101, B10000001, B10100101, B01000010, B00111100};
+byte nf[8] = {B00000000, B00000000, B00000000, B01111110, B00000000, B00000000, B00100100, B00000000};
+
+// Печальный смайл
+//byte sf[8] = {B00111100, B01000010, B10100101, B10011001, B10000001, B10100101, B01000010, B00111100};
+byte sf[8] = {B00000000, B01000010, B00100100, B00011000, B00000000, B00000000, B00100100, B00000000};
+
+// Цифра 1
+byte number1[8] = {B00111000,B00010000,B00010000,B00010000,B00010000,B00010000,B00011000,B00010000};
+// Цифра 2
+byte number2[8] = {B00111100,B00000100,B00001000,B00010000,B00100000,B00100000,B00100100,B00011000};
+// Цифра 3
+byte number3[8] = {B00011000,B00100100,B00100000,B00010000,B00011000,B00100000,B00100100,B00011000};
+
+//Огонь
+byte flame[8] = {B00000000,B01001110,B01001010,B01001010,B01001010,B01101010,B01001110,B00000000};
+
+//ночь
+//byte night[8] = {B11111111,B11111111,B11100111,B11000011,B11000011,B11100111,B11111111,B11111111};
+  byte night[8] = {B01111110,B01111110, B01100110,B01100110, B11111111,B01111110,B00111100,B00011000};
+
+//sound
+byte sound[8] = {B00000111,B00001111,B00001110,B00001100,B00001100,B11111100,B11001100,B11111100};
+
+//gas
+byte gas[8] = {B01100110,B00100100,B10111101,B10111101,B11111111,B00011000,B00111100,B00011000};
+
+//ДВЕРИ
+const int angleDoorOpen = 110;  // константа для хранения угла поворота серводвигателя открытой двери
+const int angleDoorClose = 170; //константа для хранения угла поворота серводвигателя закрытой двери
+const int delayDoor = 1000;     // константа для хранения задержки. Необходима для корректного открытия двери, т.к дальше отключаем сервопривод
+
+int valpot = 0;     // переменная для хранения значения потенциометра
+int angleServo = 0; // переменная для хранения угла поворота серводвигателя
+int angleOldServo = 0; // переменная для хранения предыдущего угла поворота серводвигателя
+
+unsigned long doorOnTime;      // время открытия дверей
+boolean numberDoorShow=false;  // флаг отсчета цифр 3..1 на матрице при закрывании дверей
+boolean doorOn = false;     // флаг открытой двери
+const int doorTimeClose=10; // время, через которое закроется открытая дверь (сек)
+
+boolean nightOn=false;    //флаг освещенности false-светло, true-темно
+boolean flameOn=false;    //флаг огня  false-нет огня, true-звоните "01"
+boolean gasOn=false;      //флаг газа  false-все ОК!, true-"ГАЗЫ!"
+boolean soundOn=false;    //флаг звука false-тихо, true-БУ! Чё ссышь?"
+
+
+//////////////////////////////////////////////////////////
+/////////////////////SETUP////////////////////////////////
+//////////////////////////////////////////////////////////                           
+void setup() {
+ 
+  Serial.begin(9600); 
+  RemoteXY_Init ();                          // Инициализация RemoteXY
+  strcpy(RemoteXY.Temp, "");
+  strcpy(RemoteXY.Humidity, "");
+  strcpy(RemoteXY.MQ_Sensor, "");
+  strcpy(RemoteXY.Rasstoyanie[11], "");
+  strcpy(RemoteXY.IK_Datchik,"");
+  strcpy(RemoteXY.FLAME, "");
+  strcpy(RemoteXY.Door_Status,"");
+ //================================================================
+  
+  expander.begin(0x20);                      // Инициализация расширителя
+  lcd.init();                                // Инициализация LCD-дисплея
+  lcd.backlight();                           // Включение подсветки
+  lcd.setCursor(6, 1);                       // Установка курсора на положение 6 символ 2 строка
+  lcd.print("DOOR CLOSE");                   // Печать на LCD-дисплей
+  
+  strcpy(RemoteXY.Door_Status, "CLOSED");
+  
+  matr.shutdown(0, false);                 // Выключение энергосберегающий режим
+  matr.setIntensity(0, 8);                 // Установка яркости на среднее значение
+  matr.clearDisplay(0);                    // Отчистка матрицы
+  
+  expander.pinMode(LED_PIN_RED, OUTPUT);  // Настройка пина красного LED на выход
+  expander.pinMode(LED_PIN_GREEN, OUTPUT);// Настройка пина зеленого LED на выход
+  expander.pinMode(ZummerPin, OUTPUT);    // Настройка пина Зуммера (на расширителе) на выход
+  expander.pinMode(FlamePin, INPUT);      // Настройка пина Датчика Пламени(на расширителе) на вход
+  expander.pinMode(SoundPin, INPUT);      // Настройка пина Датчика звука (на расширителе) на вход
+  expander.pinMode(ZummerPin,OUTPUT);    // Настройка пина Зуммера (на расширителе) на выход
+  
+  pinMode(photoPin,INPUT);              // Настройка пина фоторезистора на вход
+  pinMode(TrigPin, OUTPUT);             // Настройка пина Trig (Датчик Расстояния) на выход
+  pinMode(EchoPin, INPUT);              // Настройка пина Echo (Датчик Расстояния) на выход
+  pinMode(IKPin,   INPUT);              // Настройка пина Датчика Растояния(на расширителе) на вход
+  pinMode(DHTPIN,  INPUT);              // Настройка датчика температуры DHT11 на вход
+  
+  
+  digitalWrite(IKPin, LOW);                // Подача LOW на пин ИК-Датчика (нет движения)
+  expander.digitalWrite(FlamePin, HIGH);   // Подача HIGH на пин Датчика пламени (нет огня)
+  expander.digitalWrite(SoundPin, HIGH);   // Подача LOW на пин Датчика звука (нет звука)
+  expander.digitalWrite(LED_PIN_GREEN, HIGH);  //"зажигаем" зеленый LED
+  
+  dht.begin();                          // Запускаем датчик температуры и влажности DHT11
+  SPI.begin();                          // Запускаем передачу по SPI шине
+  mfrc522.PCD_Init();                   // Инициализация RFID-считывателя
+
+  myservo.write(angleDoorClose);  //закрываем дверь
+  CloseDoor();
+}
+
+//////////////////////////////////////////////////////////
+/////////////////////loop/////////////////////////////////
+//////////////////////////////////////////////////////////     
+void loop() {
+
+  RemoteXY_Handler (); //Обработчик RemoteXY
+  ButtonHandler();    //Обработчик кнопки у приложения RemoteXY
+  RFIDFunc();         //Функция для RFID-считывателя
+  LCDFunc();          //Функция для вывода темературы и ... на LCD-дисплей
+  RasstFunc();        //Функция для датчика расстояния
+  IKFunc();           //Функция для ИК-Датчика
+
+  if ((!numberDoorShow)&&(!nightOn)&&(!flameOn)&&(!gasOn)&&(!soundOn))
+  PotenFace();        //Функция для потенциометра и датчика расстояния
+ 
+  FlameFunc();        //Функция для датчика огня
+  PhotoFun();            //Функция для фоторезистора  
+  SoundFunc();        //Функция для датчика звука
+  noTone(ZummerPin);
+
+  if(doorOn) ThreeTwoOne(); //если дверь открыта, то через 10 сек закрываем и на матрицу "3-2-1" 
+}
+
+//////////////// Ф У Н К Ц И И //////////////////////////////
+//--------------------------------------------------------------------------------------------------------------------------
+//Читаем значение кнопки RemoteXY
+void ButtonHandler()
+{
+  if (RemoteXY.Door != 0) OpenDoor();       // Если кнопка в приложении находится в положении opened - выполняем функцию открывания двери,
+  else CloseDoor();                         // Если в положении closed - выполняем фунцкию закрывания двери
+}
+//--------------------------------------------------------------------------------------------------------------------------
+//Выводим 3-2-1 на Матрицу и закрываем дверь
+void ThreeTwoOne() { 
+  numberDoorShow=true;
+  int t=millis() - doorOnTime; 
+  if(t>7000) 
+    {
+      runMatrix(number3); //Вывод цифры 3 на Матрицу 
+      delay(1000);
+      runMatrix(number2);  //Вывод цифры 2 на Матрицу
+      delay(1000);
+      runMatrix(number1);  //Вывод цифры 1 на Матрицу
+      delay(1000);    
+      CloseDoor();
+      RemoteXY.Door = 0;  //Значение кнопки присваиваем 0(CLOSED) для параллельного открытия и закрытия с телефона и RFID
+      doorOn=false;
+      numberDoorShow=false;
+    }          
+}
+//--------------------------------------------------------------------------------------------------------------------------
+//Открыть дверь
+void OpenDoor() {                           // Функция открывания двери
+
+  if (myservo.read() != angleDoorOpen)      // Если дверь закрыта(состояние сервопривода примерно 110-120)
+  {
+    toneFunc(ZummerPin, 1500, 100);         // Звоним, если дверь открывается
+    toneFunc(ZummerPin, 1500, 100);
+    strcpy(RemoteXY.Door_Status, "OPENED"); // Выводим значение "OPENED" в приложение RemoteXY
+
+  //  lowEnergy(0);                           //Выключаем матрицу 8*8 и LCD-дисплей
+    
+    myservo.attach(ServoPin);               // Подлючение сервопривода к пину ServoPin
+    myservo.write(angleDoorOpen);           // Открываем дверь(записываем значение angleDoorOpen0 в сервопривод)
+    delay(delayDoor);                       // Задержка delayDoor (в мс). Необходима для корректного открытия двери, т.к дальше отключаем сервопривод
+    myservo.detach();                       // Отключаем сервопривод от пина ServoPin
+
+  //  lowEnergy(1);                           //Включаем матрицу 8*8 и LCD-дисплей
+    
+    lcd.setCursor(6, 1);                    // Выводим на LCD-Дисплей DOOR OPEN
+    lcd.print("DOOR OPEN!");
+  
+    doorOnTime = millis();                  //фиксируем время открытия дверей с начала работы программы
+    doorOn = true;                          //флаг состояния двери = true
+    
+    expander.digitalWrite(LED_PIN_RED, HIGH); 
+    expander.digitalWrite(LED_PIN_GREEN,LOW); 
+  }
+}
+
+//--------------------------------------------------------------------------------------------------------------------------
+//Закрыть дверь
+void CloseDoor() {                           // Функция открывания двери
+  
+  if (myservo.read() == angleDoorOpen)     // Если дверь открыта(состояние сервопривода 60)
+  {
+    toneFunc(ZummerPin, 1500, 100);         // Звоним, если дверь открывается
+    toneFunc(ZummerPin, 1500, 100);
+    strcpy(RemoteXY.Door_Status, "CLOSED"); // Выводим значение "CLOSED" в приложение RemoteXY
+    
+  // lowEnergy(0);                           //Выключаем матрицу 8*8 и LCD-дисплей
+    
+    myservo.attach(ServoPin);               // Подлючение сервопривода к пину ServoPin
+    myservo.write(angleDoorClose);          // Закрываем дверь(записываем значение angleDoorClose в сервопривод)
+    delay(delayDoor);                             // Задержка в 250 мс(Необходима для корректного открытия двери, т.к дальше отключаем сервопривод)
+    myservo.detach();                       // Отключаем сервопривод от пина ServoPin
+    
+  //  lowEnergy(1);                           //Включаем матрицу 8*8 и LCD-дисплей
+    
+    lcd.setCursor(6, 1);                    // Выводим на LCD-Дисплей DOOR CLOSE
+    lcd.print("DOOR CLOSE");
+    doorOn = false;                          //флаг состояния двери = false
+   
+    expander.digitalWrite(LED_PIN_RED, LOW); 
+    expander.digitalWrite(LED_PIN_GREEN,HIGH); 
+   
+  }
+}
+
+//--------------------------------------------------------------------------------------------------------------------------
+// Функция "Энергосберегающий режим". Выключает дисплеи при open/close двери
+void lowEnergy(byte m){
+ if (m==0){
+    
+    matr.clearDisplay(0); 
+    matr.shutdown(0, true);             // Включение энергосберегающего режима Матрицы 8*8 (выключение дисплея)
+    lcd.noDisplay();                     //Выключение LCD-дисплея  
+    lcd.setBacklight(false);             //выключить подсветку LCD  
+  }
+  else{
+    matr.shutdown(0, false);             //Выключение энергосберегающего режима Матрицы 8*8 (включение дисплея)
+    lcd.display();                       //Включение LCD-дисплея       
+    lcd.setBacklight(true);               //включить подсветку LCD
+  }
+  
+  delay(250);  
+}
+
+//--------------------------------------------------------------------------------------------------------------------------
+// Функция для вывода температуры,влажности и др. на LCD дисплей
+void LCDFunc()                              
+{
+  int t = dht.readTemperature();            // Считываем температуру в переменную
+  int h = dht.readHumidity();               // Считываем влажность в переменную
+ 
+ // Проверка чтения данных
+  if (isnan(h) || isnan(t)) {
+    Serial.println("Failed to read from DHT sensor!");
+    t=25;h=47;
+    return;
+  } 
+  
+  int pm = analogRead(MQPin);               // Считываем значение датчика MQ в переменную
+  /*  
+     преобразуем значение концентрации газа в строку  
+    и помещаем ее сразу в поле MQ_Sensor структуры RemoteXY  
+  */ 
+  dtostrf(pm, 0, 0, RemoteXY.MQ_Sensor);    // Выводим значение датчика MQ в приложение RemoteXY
+  dtostrf(t, 0, 0, RemoteXY.Temp);          // Выводим значение датчика температуры в приложение RemoteXY
+  dtostrf(h, 0, 0, RemoteXY.Humidity);      // Выводим значение датчика влажность в приложение RemoteXY
+  lcd.setCursor(0, 0);                      //Выводим на первую строчку LCD-дисплея значения температуры, влажности и значения MQ-сенсора
+  lcd.print("+");
+  lcd.setCursor(1, 0);
+  lcd.print(t);
+  lcd.setCursor(3, 0);
+  lcd.print((char)223);
+  lcd.setCursor(4, 0);
+  lcd.print("C/");
+  lcd.setCursor(6, 0);
+  lcd.print(h);
+  lcd.setCursor(8, 0);
+  lcd.print("%");
+  lcd.setCursor(10, 0);
+  lcd.print(pm);
+  lcd.setCursor(13, 0);
+  lcd.print("ppm");
+
+  //выводим на матрицу пиктограмму газа
+  if(pm>400){
+    gasOn=true;
+    runMatrix(gas); //выводим символ на матрицу
+  }
+  else{
+      gasOn=false;
+  }
+}
+//--------------------------------------------------------------------------------------------------------------------------
+// Функция для датчика огня
+void FlameFunc() 
+{
+  if (expander.digitalRead(FlamePin) == LOW) // Если значение пина 0(датчик обнаружил пламя), то выводим на LCD-дисплей и в приложение RemoteXY "FLAME"
+  {
+    lcd.setCursor(6, 1);
+    lcd.print("FLAME! 01 ");
+    strcpy(RemoteXY.FLAME, "FLAME!");
+    runMatrix(flame); // Вывод символа 01 на Матрице 8х8    
+    flameOn=true; 
+   
+  }
+  else // Если датчик не обнаружил, то выводим на LCD-дисплей значение положения двери, а в приложение выводим "OK"
+  {
+    if (RemoteXY.Door != 0) {
+      lcd.setCursor(6, 1);
+      lcd.print("DOOR OPEN!");
+    }
+    else
+    {
+      lcd.setCursor(6, 1);
+      lcd.print("DOOR CLOSE");
+    }
+    flameOn=false;
+    strcpy(RemoteXY.FLAME, "OK");
+  }
+}
+
+//--------------------------------------------------------------------------------------------------------------------------
+// Функция для датчика звука
+void SoundFunc() 
+{
+  if (expander.digitalRead(SoundPin) == LOW) // Если значение пина 0(датчик обнаружил звук), то выводим на матрицу символ
+  {
+    lcd.setCursor(6, 1);
+    lcd.print("AAAAAA! ");
+    strcpy(RemoteXY.FLAME, "AAAAA!");
+    runMatrix(sound); // Вывод символа ноты на Матрице 8х8
+    soundOn=true;  
+    Serial.println("AAAAAA!");
+    alarmLed();
+    delay(20); 
+  }
+  else // Если датчик не обнаружил, то выводим на LCD-дисплей значение положения двери, а в приложение выводим "OK"
+  {
+    if (RemoteXY.Door != 0) {
+      lcd.setCursor(6, 1);
+      lcd.print("DOOR OPEN!");
+    }
+    else
+    {
+      lcd.setCursor(6, 1);
+      lcd.print("DOOR CLOSE");
+    }
+    soundOn=false;  
+    strcpy(RemoteXY.FLAME, "OK");
+    Serial.println("OOOOO!");
+    delay(20);
+  }
+}
+//--------------------------------------------------------------------------------------------------------------------------
+//Функция для ИК-Датчика
+void IKFunc() 
+{
+ if (digitalRead(IKPin) == HIGH) //Если датчик возвращает 1(датчик обнаружил движение), то выводим в приложение "ALARM"
+  {
+    strcpy(RemoteXY.IK_Datchik, "ALARM");
+    Serial.println("ALARM!");
+    alarmLed();
+
+  }
+  else  ////Если датчик возвращает 1(датчик НЕ обнаружил движение), то выводим в приложение "Scan"
+  {
+    strcpy(RemoteXY.IK_Datchik, "SCAN");
+  }
+}
+//--------------------------------------------------------------------------------------------------------------------------
+// Функция RFID-считывателя
+void RFIDFunc() 
+{
+    
+  // Reset the loop if no new card present on the sensor/reader. This saves the entire process when idle.
+  if (!mfrc522.PICC_IsNewCardPresent()) {
+    delay(50);
+   // Serial.println("No card");
+    return;
+  }   
+
+  if (!mfrc522.PICC_ReadCardSerial()){
+    delay(50);
+    return;
+  }
+    
+  String content = "";
+  for (byte i = 0; i < mfrc522.uid.size; i++)
+  {
+    content.concat(String(mfrc522.uid.uidByte[i] < 0x10 ? " 0" : " "));
+    content.concat(String(mfrc522.uid.uidByte[i], HEX));
+  }
+  content.toUpperCase();
+ // Serial.print("Tag UID:"); //Вывод в консоль UID считываемого устройства(в нашем случае брелок или карта)
+ // Serial.println(content);
+
+   if (content.substring(1) == "E7 FC AD 26" || content.substring(1) == "D2 07 A9 1B" ) // Если UID карты или брелка совпадает с заданным,то
+  {
+    if (myservo.read() != angleDoorOpen) //Если дверь закрыта, то открываем дверь
+    {
+      OpenDoor();
+      RemoteXY.Door = 1; //Значение кнопки присваиваем 1(OPEN) для параллельного открытия и закрытия с телефона и RFID
+    }
+    else
+    {
+      CloseDoor();
+      RemoteXY.Door = 0;  //Значение кнопки присваиваем 0(CLOSED) для параллельного открытия и закрытия с телефона и RFID
+    }
+  }
+}
+//--------------------------------------------------------------------------------------------------------------------------
+// Функция зуммера
+void toneFunc(byte pin, uint16_t frequency, uint16_t duration) //Функция для Зуммера(Реализация стандартной функции tone)
+{
+  unsigned long startTime = millis();
+  unsigned long halfPeriod = 1000000L / frequency / 2;
+  expander.pinMode(pin, OUTPUT);
+  while (millis() - startTime < duration)
+  {
+    expander.digitalWrite(pin, HIGH);
+    delayMicroseconds(halfPeriod);
+    expander.digitalWrite(pin, LOW);
+    delayMicroseconds(halfPeriod);
+  }
+    expander.pinMode(pin, INPUT);
+}
+//--------------------------------------------------------------------------------------------------------------------------
+// Функция мигания красным и зеленым светодиодом со звуком
+void alarmLed() {
+  expander.digitalWrite(LED_PIN_RED, HIGH);   // включаем красный LED (HIGH is the voltage level)
+  expander.digitalWrite(LED_PIN_GREEN, LOW);  // выключаем зеленый LED (LOW is the voltage level)
+  toneFunc(ZummerPin, 500, 100); 
+  delay(100);                                 // пауза в сек
+  expander.digitalWrite(LED_PIN_RED, LOW);    // выключаем красный LED (LOW is the voltage level)                                
+  expander.digitalWrite(LED_PIN_GREEN, HIGH); //включаем зеленый LED (HIGH is the voltage level)                                
+  toneFunc(ZummerPin, 2500, 100); 
+  delay(100);                                 // пауза в сек
+  
+}
+//--------------------------------------------------------------------------------------------------------------------------
+//Функция для расчета расстояния и вывода его на LCD-дисплей и в приложение RemoteXY
+void RasstFunc() {  
+  digitalWrite(TrigPin, LOW);
+  delayMicroseconds(5);
+  digitalWrite(TrigPin, HIGH); // Теперь установим высокий уровень на пине Trig
+  delayMicroseconds(10);
+  digitalWrite(TrigPin, LOW);
+  int duration = pulseIn(EchoPin, HIGH); //Считываем сигнал с датчика: высокий импульс,длительность которого равна времени (в микросекундах) от отправки пинга до получения его эхо-сигнала от объекта.
+  int cm = (duration / 2) / 29.1;    // преобразуем время в расстояние
+  dtostrf(cm, 0, 0, RemoteXY.Rasstoyanie);
+  lcd.setCursor(0, 1);
+  lcd.print(cm);
+  lcd.print("cm");
+  lcd.print(" ");
+  delay(100);
+}
+//--------------------------------------------------------------------------------------------------------------------------
+// Функция для потенциометра и вывода смайла на Матрицу 8*8
+void PotenFace()                
+{ // Вывод определенного смайлика в зависимости от положение потенциометра(также используется функция SPI.end(), т.к происходит конфликт RGB-матрицы и RFID считывателя)
+ 
+  if (analogRead(PotenPin) > 642)  {
+    runMatrix(hf); // Счастливый смайл
+   }
+  else if (analogRead(PotenPin) < 341) {
+    runMatrix(sf); // Печальный смайл
+  }
+  else {
+    runMatrix(nf); // Вывод нейтрального смайла
+  }    
+   delay(250);
+        
+ }
+
+//--------------------------------------------------------------------------------------------------------------------------
+// Функция для модуля фоторезистора
+ void PhotoFun() {
+   int val = digitalRead(photoPin);
+ //Serial.println(val);
+  if (val==0) {
+     // expander.blink(0, 5, 500); // Blink led 2
+     // delay(1000);
+    nightOn=false;   
+  } else {
+     nightOn=true;
+     runMatrix(night); // Вывод символа "ночь" на Матрице 8х8
+      //digitalWrite(LED_PIN_RED, HIGH);
+  }
+ }
+//--------------------------------------------------------------------------------------------------------------------------
+// Функция для вывода изображения на Матрице 8х8
+void runMatrix(char customChar[]){  // Функция Матрицы 8*8
+ SPI.end();  //функция SPI.end() используется, т.к происходит конфликт Матрицы 8*8 и RFID считывателя)
+ for(int i = 0; i < 8; i ++)
+  {
+    //0 - адрес, либо номер устройства на шине SPI
+    //i - текущий ряд на матрице
+    //customChar[i] - значение(byte) которым заполнится ряд
+    matr.setRow(0, i, customChar[i]);
+  }    
+  delay(250);
+}
+     

@@ -1,12 +1,8 @@
-//////////////////////////////////////////////
-//        Настройки для RemoteXY            //
-//////////////////////////////////////////////
-
 // определение режима соединения и подключение библиотеки RemoteXY
 #define REMOTEXY_MODE__SOFTSERIAL
   #include <SoftwareSerial.h>
 
-#include <RemoteXY.h> //Библиотека RemoteXY. Скачать тут http://remotexy.com/ru/library/
+#include <RemoteXY.h> 
 
 // настройки соединения
 #define REMOTEXY_SERIAL_RX 2        //Пин RX для Bluetooth
@@ -76,9 +72,6 @@ struct {
 } RemoteXY;
 #pragma pack(pop)
 
-/////////////////////////////////////////////
-//           Настройки для RemoteXY         //
-/////////////////////////////////////////////
 
 #include <SPI.h>               //Библиотека SPI для RFID-считывателя
 #include <MFRC522.h>           //Библиотека для RFID-считывателя. Установить ...>Управлять библиотеками...>MFRC552

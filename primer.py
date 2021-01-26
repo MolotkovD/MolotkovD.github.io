@@ -1,3 +1,4 @@
+import pygame
 import sys
 import os
 
@@ -10,7 +11,7 @@ def resource_path(relative_path):
 
     return os.path.join(base_path, relative_path)
 
-ygame.init()
+pygame.init()
 
 screen = pygame.display.set_mode((w, h))
 pygame.display.set_icon()

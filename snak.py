@@ -31,7 +31,6 @@ black = (0, 0, 0)
 pygame.init()
 
 screen = pygame.display.set_mode((w, h))
-pygame.display.set_icon()
 pygame.display.set_caption("Это пробный тест")
 clock = pygame.time.Clock()
 

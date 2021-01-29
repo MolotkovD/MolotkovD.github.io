@@ -11,10 +11,17 @@ def resource_path(relative_path):
 
     return os.path.join(base_path, relative_path)
 
+w = 200
+h = 200
+FPS = 60
+x =  0
+y = 0
+wd = 50
+hd = 50
+b = (0, 0, 0)
 pygame.init()
 
 screen = pygame.display.set_mode((w, h))
-pygame.display.set_icon()
 pygame.display.set_caption("Это пробный тест")
 clock = pygame.time.Clock()
 
@@ -26,8 +33,8 @@ while running == True:
             running = False
 
 
-    screen.fill(black)
-    pygame.draw.rect(screen, (0, 0, 255), (x, y, wd, hd))
+    screen.fill(b)
+    pygame.draw.rect(screen, (100, 0, 100), (x, y, wd, hd))
     pygame.display.update()
 
 pygame.quit()

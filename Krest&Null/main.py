@@ -26,27 +26,25 @@ while running_app == True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running_app = False
-        pressed = pygame.mouse.get_pressed()
-        pos_x , pos_y = pygame.mouse.get_pos()
-
-        if pressed[0]:
+        if event.type == pygame.MOUSEBUTTONUP:
+            pos_x, pos_y = pygame.mouse.get_pos()
             if (pos_x >= 0 and pos_y >= 0) and (pos_x < 200 and pos_y < 200):
                 print(1)
-            if (pos_x >= 202 and pos_y >= 0) and (pos_x < 200 + 200 and pos_y < 200 + 200):
+            if (pos_x >= 202 and pos_y >= 0) and (pos_x < 400 and pos_y < 200):
                 print(2)
-            if (pos_x >= 404 and pos_y >= 0) and (pos_x < 200 and pos_y < 200):
+            if (pos_x >= 404 and pos_y >= 0) and (pos_x < 600 and pos_y < 200):
                 print(3)
-            if (pos_x >= 0 and pos_y >= 0) and (pos_x < 200 and pos_y < 200):
+            if (pos_x >= 0 and pos_y >= 200) and (pos_x < 200 and pos_y < 400):
                 print(4)
-            if (pos_x >= 202 and pos_y >= 0) and (pos_x < 200 and pos_y < 200):
+            if (pos_x >= 202 and pos_y >= 200) and (pos_x < 400 and pos_y < 400):
                 print(5)
-            if (pos_x >= 404 and pos_y >= 0) and (pos_x < 200 and pos_y < 200):
+            if (pos_x >= 404 and pos_y >= 200) and (pos_x < 600 and pos_y < 400):
                 print(6)
-            if (pos_x >= 0 and pos_y >= 0) and (pos_x < 200 and pos_y < 200):
+            if (pos_x >= 0 and pos_y >= 400) and (pos_x < 200 and pos_y < 600):
                 print(7)
-            if (pos_x >= 202 and pos_y >= 0) and (pos_x < 200 and pos_y < 200):
+            if (pos_x >= 202 and pos_y >= 400) and (pos_x < 400 and pos_y < 600):
                 print(8)
-            if (pos_x >= 404 and pos_y >= 0) and (pos_x < 200 and pos_y < 200):
+            if (pos_x >= 404 and pos_y >= 400) and (pos_x < 600 and pos_y < 600):
                 print(9)
 
     win.fill((0, 0, 0))

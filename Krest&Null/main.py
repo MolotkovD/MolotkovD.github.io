@@ -7,6 +7,8 @@ win = pygame.display.set_mode((W_W, H_W))
 block_size = 200
 running_app = True
 FPS = 60
+cross = pygame.image.load("./img/cross.png")
+circle = pygame.image.load("./img/circle.png")
 
 def draw():
     for y in range(H):
@@ -29,7 +31,9 @@ while running_app == True:
         if event.type == pygame.MOUSEBUTTONUP:
             pos_x, pos_y = pygame.mouse.get_pos()
             if (pos_x >= 0 and pos_y >= 0) and (pos_x < 200 and pos_y < 200):
-                print(1)
+                draw()
+                win.blit(circle, (0, 0))
+                pygame.display.update()
             if (pos_x >= 202 and pos_y >= 0) and (pos_x < 400 and pos_y < 200):
                 print(2)
             if (pos_x >= 404 and pos_y >= 0) and (pos_x < 600 and pos_y < 200):

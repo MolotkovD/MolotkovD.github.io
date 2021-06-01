@@ -15,29 +15,35 @@ running_app = True
 FPS = 60
 cross = pygame.image.load("./img/cross.png")
 circle = pygame.image.load("./img/circle.png")
-fon = pygame.font.Font("./fonts/fontr.ttf", 50, (255, 255, 255))
+fon = pygame.font.Font("./fonts/fontr.ttf", 30)
 
 queue_player = "cross"
-win_game = False
-score = fon.render(f"Win = {win_game}", True, )
-def wining():
-    if data["score"]["1"] == data["score"]["2"] == data["score"]["3"] and data["rules"]["1"] == data["rules"]["2"] == data["rules"]["3"] == False:
-        print("WIN!!")
-    if data["score"]["4"] == data["score"]["5"] == data["score"]["6"] and data["rules"]["4"] == data["rules"]["5"] == data["rules"]["6"] == False:
-        print("WIN!!")
-    if data["score"]["7"] == data["score"]["8"] == data["score"]["9"] and data["rules"]["7"] == data["rules"]["8"] == data["rules"]["9"] == False:
-        print("WIN!!")
-    if data["score"]["1"] == data["score"]["4"] == data["score"]["7"] and data["rules"]["1"] == data["rules"]["4"] == data["rules"]["7"] == False:
-        print("WIN!!")
-    if data["score"]["2"] == data["score"]["5"] == data["score"]["8"] and data["rules"]["2"] == data["rules"]["5"] == data["rules"]["8"] == False:
-        print("WIN!!")
-    if data["score"]["3"] == data["score"]["6"] == data["score"]["9"] and data["rules"]["3"] == data["rules"]["6"] == data["rules"]["9"] == False:
-        print("WIN!!")
-    if data["score"]["3"] == data["score"]["5"] == data["score"]["7"] and data["rules"]["3"] == data["rules"]["5"] == data["rules"]["7"] == False:
-        print("WIN!!")
-    if data["score"]["1"] == data["score"]["5"] == data["score"]["9"] and data["rules"]["1"] == data["rules"]["5"] == data["rules"]["9"] == False:
-        print("WIN!!")
 
+
+def wining():
+    win_game = False
+
+    if data["score"]["1"] == data["score"]["2"] == data["score"]["3"] and data["rules"]["1"] == data["rules"]["2"] == data["rules"]["3"] == False:
+        win_game = True
+    if data["score"]["4"] == data["score"]["5"] == data["score"]["6"] and data["rules"]["4"] == data["rules"]["5"] == data["rules"]["6"] == False:
+        win_game = True
+    if data["score"]["7"] == data["score"]["8"] == data["score"]["9"] and data["rules"]["7"] == data["rules"]["8"] == data["rules"]["9"] == False:
+        win_game = True
+    if data["score"]["1"] == data["score"]["4"] == data["score"]["7"] and data["rules"]["1"] == data["rules"]["4"] == data["rules"]["7"] == False:
+        win_game = True
+    if data["score"]["2"] == data["score"]["5"] == data["score"]["8"] and data["rules"]["2"] == data["rules"]["5"] == data["rules"]["8"] == False:
+        win_game = True
+    if data["score"]["3"] == data["score"]["6"] == data["score"]["9"] and data["rules"]["3"] == data["rules"]["6"] == data["rules"]["9"] == False:
+        win_game = True
+    if data["score"]["3"] == data["score"]["5"] == data["score"]["7"] and data["rules"]["3"] == data["rules"]["5"] == data["rules"]["7"] == False:
+        win_game = True
+    if data["score"]["1"] == data["score"]["5"] == data["score"]["9"] and data["rules"]["1"] == data["rules"]["5"] == data["rules"]["9"] == False:
+        win_game = True
+    ret = pygame.Rect(615, 100, 200, 100)
+    pygame.draw.rect(win, (0, 0, 0), ret)
+    score = fon.render(f"Win = {win_game}", True, (255, 255, 255))
+    win.blit(score, (615, 100))
+    pygame.display.update()
 def queue(x, y, fig):
 
 
@@ -127,6 +133,7 @@ clock = pygame.time.Clock()
 
 while running_app == True:
     wining()
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running_app = False

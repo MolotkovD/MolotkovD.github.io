@@ -2,16 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="11219cb2-295f-45e6-b36f-f74d274a9296" name="Default Changelist" comment="Merge branch 'master' of https://github.com/MolotkovD/MolotkovD.github.io">
-      <change beforePath="$PROJECT_DIR$/../Krest&amp;Null/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Krest&amp;Null/.idea/Krest&amp;Null.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Krest&amp;Null/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Krest&amp;Null/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Krest&amp;Null/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Krest&amp;Null/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Krest&amp;Null/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Krest&amp;Null/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Krest&amp;Null/img/circle.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Krest&amp;Null/img/cross.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Krest&amp;Null/main.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fonts/fontr.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/fonts/fontr.ttf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -2,9 +2,10 @@ import pygame
 import json
 from SETTING import *
 import DEFS_Game
-with open("./data/libs.json", "r") as dih:
-    data = json.load(dih)
 
+with open("data/libs.json", "r") as dih:
+    data = json.load(dih)
+    dih.close()
 def wining():
     win_game = False
     status = None
@@ -62,6 +63,7 @@ while APP_RANNING == True:
 
                 with open("./data/libs.json", "w") as dih:
                     json.dump(data, dih, indent=4)
+                    dih.close()
                 if data["rules"]["1"] == True:
                     DEFS_Game.draw()
                     data["rules"]["1"] = False
@@ -75,6 +77,7 @@ while APP_RANNING == True:
                 data["score"]["2"] = queue_player
                 with open("./data/libs.json", "w") as dih:
                     json.dump(data, dih, indent=4)
+                    dih.close()
 
                 if data["rules"]["2"] == True:
                     DEFS_Game.draw()
@@ -88,6 +91,7 @@ while APP_RANNING == True:
                 data["score"]["3"] = queue_player
                 with open("./data/libs.json", "w") as dih:
                     json.dump(data, dih, indent=4)
+                    dih.close()
                 if data["rules"]["3"] == True:
                     DEFS_Game.draw()
                     data["rules"]["3"] = False
@@ -100,6 +104,7 @@ while APP_RANNING == True:
                 data["score"]["4"] = queue_player
                 with open("./data/libs.json", "w") as dih:
                     json.dump(data, dih, indent=4)
+                    dih.close()
                 if data["rules"]["4"] == True:
                     DEFS_Game.draw()
                     data["rules"]["4"] = False
@@ -111,6 +116,7 @@ while APP_RANNING == True:
                 data["score"]["5"] = queue_player
                 with open("./data/libs.json", "w") as dih:
                     json.dump(data, dih, indent=4)
+                    dih.close()
                 if data["rules"]["5"] == True:
                     DEFS_Game.draw()
                     data["rules"]["5"] = False
@@ -122,6 +128,7 @@ while APP_RANNING == True:
                 data["score"]["6"] = queue_player
                 with open("./data/libs.json", "w") as dih:
                     json.dump(data, dih, indent=4)
+                    dih.close()
                 if data["rules"]["6"] == True:
                     DEFS_Game.draw()
                     data["rules"]["6"] = False
@@ -133,6 +140,7 @@ while APP_RANNING == True:
                 data["score"]["7"] = queue_player
                 with open("./data/libs.json", "w") as dih:
                     json.dump(data, dih, indent=4)
+                    dih.close()
                 if data["rules"]["7"] == True:
                     DEFS_Game.draw()
                     data["rules"]["7"] = False
@@ -144,6 +152,7 @@ while APP_RANNING == True:
                 data["score"]["8"] = queue_player
                 with open("./data/libs.json", "w") as dih:
                     json.dump(data, dih, indent=4)
+                    dih.close()
                 if data["rules"]["8"] == True:
                     DEFS_Game.draw()
                     data["rules"]["8"] = False
@@ -155,6 +164,7 @@ while APP_RANNING == True:
                 data["score"]["9"] = queue_player
                 with open("./data/libs.json", "w") as dih:
                     json.dump(data, dih, indent=4)
+                    dih.close()
                 if data["rules"]["9"] == True:
                     DEFS_Game.draw()
                     data["rules"]["9"] = False
@@ -166,4 +176,5 @@ while APP_RANNING == True:
 
 with open("./data/libs.json", "w") as file:
     json.dump(end_load, file, indent=4)
+    file.close()
 pygame.quit()

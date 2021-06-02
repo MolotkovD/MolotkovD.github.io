@@ -2,16 +2,10 @@ from SETTING import *
 import pygame
 import json
 
-def score_win():
-    with open("./data/score_win.json", "r") as GaTr:
-        gr = json.load(GaTr)
 
 
-def json_update_start():
-    with open("./data/libs.json", "r") as dih:
-        data = json.load(dih)
-    return data
-data = json_update_start()
+
+
 
 def restart():
     for y in range(3):

@@ -2,8 +2,13 @@ from SETTING import *
 import pygame
 import json
 
+def score_win():
+    with open("./data/score_win.json", "r") as GaTr:
+        gr = json.load(GaTr)
+
+
 def json_update_start():
-    with open("libs.json", "r") as dih:
+    with open("./data/libs.json", "r") as dih:
         data = json.load(dih)
     return data
 data = json_update_start()
@@ -29,7 +34,7 @@ def queue(x, y, fig):
 def draw():
 
 
-    with open("libs.json", "r") as op:
+    with open("./data/libs.json", "r") as op:
         data_render = json.load(op)
 
     if data_render["score"]["1"] == "cross" and data_render["rules"]["1"] == True:

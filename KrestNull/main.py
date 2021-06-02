@@ -2,7 +2,7 @@ import pygame
 import json
 from SETTING import *
 import DEFS_Game
-with open("libs.json", "r") as dih:
+with open("./data/libs.json", "r") as dih:
     data = json.load(dih)
 
 def wining():
@@ -39,6 +39,7 @@ def wining():
     pygame.display.update()
 
 
+
 DEFS_Game.restart()
 DEFS_Game.draw()
 
@@ -59,7 +60,7 @@ while APP_RANNING == True:
             if (pos_x >= 0 and pos_y >= 0) and (pos_x < 200 and pos_y < 200): # 1
                 data["score"]["1"] = queue_player
 
-                with open("libs.json", "w") as dih:
+                with open("./data/libs.json", "w") as dih:
                     json.dump(data, dih, indent=4)
                 if data["rules"]["1"] == True:
                     DEFS_Game.draw()
@@ -72,7 +73,7 @@ while APP_RANNING == True:
 
             if (pos_x >= 202 and pos_y >= 0) and (pos_x < 400 and pos_y < 200): # 2
                 data["score"]["2"] = queue_player
-                with open("libs.json", "w") as dih:
+                with open("./data/libs.json", "w") as dih:
                     json.dump(data, dih, indent=4)
 
                 if data["rules"]["2"] == True:
@@ -85,7 +86,7 @@ while APP_RANNING == True:
                     queue_player = "circle"
             if (pos_x >= 404 and pos_y >= 0) and (pos_x < 600 and pos_y < 200): # 3
                 data["score"]["3"] = queue_player
-                with open("libs.json", "w") as dih:
+                with open("./data/libs.json", "w") as dih:
                     json.dump(data, dih, indent=4)
                 if data["rules"]["3"] == True:
                     DEFS_Game.draw()
@@ -97,7 +98,7 @@ while APP_RANNING == True:
                     queue_player = "circle"
             if (pos_x >= 0 and pos_y >= 200) and (pos_x < 200 and pos_y < 400): # 4
                 data["score"]["4"] = queue_player
-                with open("libs.json", "w") as dih:
+                with open("./data/libs.json", "w") as dih:
                     json.dump(data, dih, indent=4)
                 if data["rules"]["4"] == True:
                     DEFS_Game.draw()
@@ -108,7 +109,7 @@ while APP_RANNING == True:
                     queue_player = "circle"
             if (pos_x >= 202 and pos_y >= 200) and (pos_x < 400 and pos_y < 400): # 5
                 data["score"]["5"] = queue_player
-                with open("libs.json", "w") as dih:
+                with open("./data/libs.json", "w") as dih:
                     json.dump(data, dih, indent=4)
                 if data["rules"]["5"] == True:
                     DEFS_Game.draw()
@@ -119,7 +120,7 @@ while APP_RANNING == True:
                     queue_player = "circle"
             if (pos_x >= 404 and pos_y >= 200) and (pos_x < 600 and pos_y < 400): # 6
                 data["score"]["6"] = queue_player
-                with open("libs.json", "w") as dih:
+                with open("./data/libs.json", "w") as dih:
                     json.dump(data, dih, indent=4)
                 if data["rules"]["6"] == True:
                     DEFS_Game.draw()
@@ -130,7 +131,7 @@ while APP_RANNING == True:
                     queue_player = "circle"
             if (pos_x >= 0 and pos_y >= 400) and (pos_x < 200 and pos_y < 600): # 7
                 data["score"]["7"] = queue_player
-                with open("libs.json", "w") as dih:
+                with open("./data/libs.json", "w") as dih:
                     json.dump(data, dih, indent=4)
                 if data["rules"]["7"] == True:
                     DEFS_Game.draw()
@@ -141,7 +142,7 @@ while APP_RANNING == True:
                     queue_player = "circle"
             if (pos_x >= 202 and pos_y >= 400) and (pos_x < 400 and pos_y < 600): # 8
                 data["score"]["8"] = queue_player
-                with open("libs.json", "w") as dih:
+                with open("./data/libs.json", "w") as dih:
                     json.dump(data, dih, indent=4)
                 if data["rules"]["8"] == True:
                     DEFS_Game.draw()
@@ -152,7 +153,7 @@ while APP_RANNING == True:
                     queue_player = "circle"
             if (pos_x >= 404 and pos_y >= 400) and (pos_x < 600 and pos_y < 600): # 9
                 data["score"]["9"] = queue_player
-                with open("libs.json", "w") as dih:
+                with open("./data/libs.json", "w") as dih:
                     json.dump(data, dih, indent=4)
                 if data["rules"]["9"] == True:
                     DEFS_Game.draw()
@@ -163,6 +164,6 @@ while APP_RANNING == True:
                     queue_player = "circle"
 
 
-with open("libs.json", "w") as file:
+with open("./data/libs.json", "w") as file:
     json.dump(end_load, file, indent=4)
 pygame.quit()

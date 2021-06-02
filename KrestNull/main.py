@@ -13,8 +13,8 @@ win = pygame.display.set_mode((W_W, H_W))
 block_size = 200
 running_app = True
 FPS = 60
-cross = pygame.image.load("./img/cross.png")
-circle = pygame.image.load("./img/circle.png")
+cross = pygame.image.load("./img/Cross_opdate.png")
+circle = pygame.image.load("./img/Circle_update.png")
 fon = pygame.font.Font("./fonts/fontr.ttf", 30)
 
 queue_player = "cross"

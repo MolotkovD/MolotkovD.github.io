@@ -7,7 +7,7 @@ W_W, H_W = ((W * 201)+205), H * 201
 pygame.init()
 win = pygame.display.set_mode((W_W, H_W))
 block_size = 200
-
+APP_RANNING = True
 FPS = 60
 cross = pygame.image.load("./img/Cross_opdate.png")
 circle = pygame.image.load("./img/Circle_update.png")

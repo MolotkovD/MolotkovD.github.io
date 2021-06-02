@@ -3,11 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="11219cb2-295f-45e6-b36f-f74d274a9296" name="Default Changelist" comment="Merge branch 'master' of https://github.com/MolotkovD/MolotkovD.github.io">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DEFS_Game.py" beforeDir="false" afterPath="$PROJECT_DIR$/DEFS_Game.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SETTING.py" beforeDir="false" afterPath="$PROJECT_DIR$/SETTING.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/libs.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/libs.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/Icon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/score_win.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/score_win.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

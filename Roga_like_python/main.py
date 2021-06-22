@@ -1,7 +1,7 @@
 import tcod
 
 class App_game():
-    print("Hello")
+    pass
 
 if __name__ == '__main__':
     App_game()

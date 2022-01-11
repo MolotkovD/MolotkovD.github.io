@@ -35,9 +35,9 @@ func start_room():
 
 func detection_of_nearby_free_cells():
 	for xy in used_cells:
-		if xy.x > 0: if not used_cells.has(Vector2(xy.x - 1, xy.y)): preliminary_cells.append(Vector2(xy.x - 1, xy.y))
+		if xy.x >= 0: if not used_cells.has(Vector2(xy.x - 1, xy.y)): preliminary_cells.append(Vector2(xy.x - 1, xy.y))
 		if xy.x <= map_w: if not used_cells.has(Vector2(xy.x + 1, xy.y)): preliminary_cells.append(Vector2(xy.x + 1, xy.y))
-		if xy.y > 0 : if not used_cells.has(Vector2(xy.x, xy.y - 1)): preliminary_cells.append(Vector2(xy.x, xy.y - 1))
+		if xy.y >= 0 : if not used_cells.has(Vector2(xy.x, xy.y - 1)): preliminary_cells.append(Vector2(xy.x, xy.y - 1))
 		if xy.y <= map_h: if not used_cells.has(Vector2(xy.x, xy.y + 1)): preliminary_cells.append(Vector2(xy.x, xy.y + 1))
 
 func random_append_used_cells():

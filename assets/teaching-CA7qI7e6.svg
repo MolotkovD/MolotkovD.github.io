@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 300" fill="none">
+  <defs>
+    <linearGradient id="wall" x1="0" y1="300" x2="640" y2="0" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3b2a4f"/>
+      <stop offset="1" stop-color="#211c36"/>
+    </linearGradient>
+    <linearGradient id="board" x1="295" y1="28" x2="595" y2="243" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#40314e"/>
+      <stop offset="1" stop-color="#26233e"/>
+    </linearGradient>
+    <linearGradient id="paper" x1="107" y1="127" x2="213" y2="240" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f1d1eb"/>
+      <stop offset="1" stop-color="#ad91c8"/>
+    </linearGradient>
+    <pattern id="grid" width="23" height="23" patternUnits="userSpaceOnUse">
+      <path d="M0 23V0h23" stroke="#b7a1d2" stroke-opacity=".11"/>
+    </pattern>
+  </defs>
+  <path d="M0 0h640v300H0Z" fill="url(#wall)"/>
+  <path d="M0 38 109 4m-109 167L171 67M5 288 206 110M130 300l99-110" stroke="#92719c" stroke-opacity=".28"/>
+  <path d="M0 31 133 0 54 300H0Z" fill="#cda1c9" opacity=".12"/>
+  <path d="M22 0v210M74 0v152m-74-89 109-24M0 119l94-39M0 180l81-57" stroke="#b893bf" stroke-opacity=".38" stroke-width="2"/>
+
+  <!-- A visual explanation on the board, no written text -->
+  <path d="M252 38 596 23l11 205-355 16Z" fill="#24192f" stroke="#8f719d" stroke-width="4" stroke-linejoin="round"/>
+  <path d="m265 52 320-14 9 176-329 14Z" fill="url(#board)" stroke="#b196bd" stroke-opacity=".58"/>
+  <path d="m265 52 320-14 9 176-329 14Z" fill="url(#grid)"/>
+  <path d="m255 238 344-15 11 6v8l-356 16Z" fill="#574361" stroke="#9c79ac"/>
+  <path d="m502 227 43-2m-2 2 15-.7" stroke="#e2bdcf" stroke-width="3" stroke-linecap="round"/>
+  <path d="m297 74 30-1m-29 9 20-.6m217-22 28-1m-21 9 23-1m-26 98 30-1m-23 9 15-.8m-24 10 34-1" stroke="#c4a9d5" stroke-opacity=".6" stroke-width="2" stroke-linecap="round"/>
+  <path d="M442 78c-27 2-51 26-51 56 0 32 24 54 54 53 32-2 54-25 52-57-1-31-26-54-55-52Z" stroke="#c3a7df" stroke-opacity=".48" stroke-width="1.7" stroke-dasharray="4 6"/>
+  <path d="m402 149 37-49 44 47-33 24Z" stroke="#f0bfdc" stroke-width="2" stroke-linejoin="round"/>
+  <path d="m402 149 58-17 23 15m-44-47 11 71m10-39-10 39m-56-39 103-5M445 80v107" stroke="#b79ade" stroke-opacity=".68" stroke-width="1.4"/>
+  <path d="M439 96a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-37 49a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm48 22a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm33-24a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z" fill="#f0c8e7"/>
+  <path d="m505 116 13-11 24-1m-20 15 20-1m-202 72 31-2 14-16m-61 9 30-2" stroke="#d8b6e7" stroke-opacity=".74" stroke-width="1.8" stroke-linecap="round"/>
+  <path d="M515 71v15m-7-7 15-.6m-186 43v11m-5-5 11-.4m221-28v12m-6-6 12-.5" stroke="#eee0f4" stroke-opacity=".62"/>
+
+  <!-- A notebook and stacked textbooks in front of the board -->
+  <path d="m0 269 312-36 328 29v38H0Z" fill="#2a2039" stroke="#73587f" stroke-width="2"/>
+  <path d="m74 233 178-23 72 31-185 36Z" fill="#21192f" opacity=".68"/>
+  <path d="m64 221 169-28 68 32-4 22-167 32-66-28Z" fill="#513d67" stroke="#b38cc5" stroke-width="2.7" stroke-linejoin="round"/>
+  <path d="m68 229 63 26 165-27-3 14-163 31-62-26Z" fill="#b89ec8"/>
+  <path d="m75 239 55 24 154-27m-146 32 145-27" stroke="#735780" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="m94 204 146-24 46 22-4 18-146 27-45-23Z" fill="#654c7d" stroke="#c29bcc" stroke-width="2.4" stroke-linejoin="round"/>
+  <path d="m96 209 41 22 145-26-3 12-142 25-43-22Z" fill="#d8b7d9"/>
+  <path d="m145 234 123-23m-167 6 35 18" stroke="#9072a0" stroke-width="1.6" stroke-linecap="round"/>
+  <path d="m83 151 54-47c30 9 45 21 53 44 20-13 48-12 77 2l-14 66c-29-12-56-12-81 4-21-20-43-32-76-36Z" fill="#5a3f69" stroke="#edbde0" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="m87 145 52-48c27 9 42 20 51 45 20-13 46-13 74 0l-13 65c-26-10-54-11-77 6-21-21-43-34-76-37Z" fill="url(#paper)" stroke="#e5c3e6" stroke-width="2" stroke-linejoin="round"/>
+  <path d="m190 142-16 71m-63-62c22 4 45 18 56 29m-50-37c22 4 44 17 54 29m-45-36c18 5 38 16 48 27m21 3c16-8 35-8 49-3m-52 12c16-8 36-8 49-4m-51 13c15-8 33-9 44-6" stroke="#755582" stroke-opacity=".75" stroke-width="2" stroke-linecap="round"/>
+  <path d="m235 174 57-56 8 8-56 56-14 5Z" fill="#f4bdde" stroke="#694c79" stroke-width="2" stroke-linejoin="round"/>
+  <path d="m230 187 5-13 9 8Z" fill="#e0b8aa" stroke="#694c79"/>
+  <path d="m292 118 5-5 8 8-5 5Z" fill="#bf91ca" stroke="#694c79"/>
+  <path d="m44 212 5-4m17-3 9-7m-47 35 7-6m584-175 10-6m-6 118 11-5" stroke="#c4a0c3" stroke-opacity=".6" stroke-width="1.6"/>
+</svg>
